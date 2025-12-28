@@ -1,0 +1,49 @@
+{
+  "name": "sickline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:client\" \"npm:dev:server\"",
+    "dev:client": "vite",
+    "dev:server": "tsx src/server.ts",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "test": "tsx test/sickPeriods.test.ts",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "build-storybook": "storybook build",
+    "start": "node dist/server/server.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@fastify/static": "^6.11.2",
+    "better-sqlite3": "^9.4.1",
+    "clsx": "^2.1.1",
+    "fastify": "^4.27.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/better-sqlite3": "^7.6.9",
+    "@types/react": "^18.2.70",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^5.0.4",
+    "@storybook/addon-essentials": "^8.6.15",
+    "@storybook/addon-interactions": "^8.6.15",
+    "@storybook/react-vite": "^8.6.15",
+    "@storybook/test": "^8.6.15",
+    "@storybook/testing-library": "^0.2.2",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "postcss": "^8.4.38",
+    "storybook": "^8.6.15",
+    "tailwindcss": "^3.4.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.0"
+  }
+}
