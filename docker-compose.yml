@@ -1,0 +1,29 @@
+networks:
+  traefik-net:
+    external: true
+
+services:
+  sickline:
+    build:
+      context: .
+    image: sickline:latest
+    container_name: sickline
+    networks:
+      - traefik-net
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.sickline.rule=Host(`${SICKLINE_HOST}`)"
+      - "traefik.http.routers.sickline.entrypoints=websecure,web"
+      - "traefik.http.routers.sickline.tls=true"
+      - "traefik.http.routers.sickline.tls.certresolver=letsencrypt-dns"
+      - "traefik.http.services.sickline.loadbalancer.server.port=3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
