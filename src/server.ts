@@ -2,10 +2,10 @@ import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
 import fs from "node:fs";
 import path from "node:path";
-import { initDb } from "./db";
-import { registerMembersRoutes } from "./routes/members";
-import { registerStatusRoutes } from "./routes/status";
-import { registerSickPeriodsRoutes } from "./routes/sick-periods";
+import { initDb } from "./db.js";
+import { registerMembersRoutes } from "./routes/members.js";
+import { registerStatusRoutes } from "./routes/status.js";
+import { registerSickPeriodsRoutes } from "./routes/sick-periods.js";
 
 async function buildApp() {
   const app = Fastify({ logger: true });

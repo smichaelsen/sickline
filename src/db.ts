@@ -35,9 +35,8 @@ function runMigrations(db: Db) {
     return;
   }
 
-  const applied = new Set<string>(
-    db.prepare("SELECT name FROM _migrations").all().map((row: { name: string }) => row.name)
-  );
+  const rows = db.prepare("SELECT name FROM _migrations").all() as { name: string }[];
+  const applied = new Set<string>(rows.map((row) => row.name));
 
   const files = fs
     .readdirSync(migrationsDir)

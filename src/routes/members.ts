@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { loadMembers } from "../config/members";
+import { loadMembers } from "../config/members.js";
 
 export async function registerMembersRoutes(app: FastifyInstance) {
   app.get(

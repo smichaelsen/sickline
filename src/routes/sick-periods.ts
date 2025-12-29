@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import type { Db } from "../db";
-import { computeSickPeriods, parseDate, type DailyStatusEntry, type SickPeriod } from "../services/sickPeriods";
+import type { Db } from "../db.js";
+import { computeSickPeriods, parseDate, type DailyStatusEntry, type SickPeriod } from "../services/sickPeriods.js";
 
 const DATE_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$";
 
