@@ -21,7 +21,7 @@ export type SickPeriodProps = {
 
 const DEFAULT_PX_PER_DAY = 32;
 const FADE_PX = 8;
-const BAR_HEIGHT_PX = 24; // derived from h-10 with inset-y-2
+const BAR_HEIGHT_PX = 40;
 
 const severityColor: Record<Severity, string> = {
   yellow: "#f59e0b",
@@ -129,7 +129,7 @@ export function SickPeriod({
   return (
     <div
       ref={containerRef}
-      className={clsx("relative h-10", className)}
+      className={clsx("relative", className)}
       style={{
         width:
           totalDays === 1
@@ -139,12 +139,9 @@ export function SickPeriod({
       }}
     >
       <div
-        className={clsx(
-          "absolute inset-y-2",
-          endDate ? "rounded-full" : "rounded-l-full rounded-r-none"
-        )}
+        className={clsx("w-full", endDate ? "rounded-full" : "rounded-l-full rounded-r-none")}
         style={{
-          width: "100%",
+          height: `${BAR_HEIGHT_PX}px`,
           background: gradient ?? severityColor[severityPeriods[0]?.status ?? "yellow"]
         }}
       />
