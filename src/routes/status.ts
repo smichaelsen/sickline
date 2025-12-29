@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { FastifyInstance } from "fastify";
-import type { Db } from "../db";
+import type { Db } from "../db.js";
 
 type StatusValue = "green" | "yellow" | "red";
 
