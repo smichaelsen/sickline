@@ -99,3 +99,14 @@ export const SingleDayYellowWithComment: Story = {
     pxPerDay: 18
   }
 };
+
+export const TruncatedStart: Story = {
+  args: {
+    startDate: "2024-03-15",
+    endDate: "2024-03-25",
+    severityPeriods: [{ startDate: "2024-03-15", endDate: "2024-03-25", status: "red" }],
+    title: "Preceding window",
+    truncated: true,
+    pxPerDay: 18
+  }
+};

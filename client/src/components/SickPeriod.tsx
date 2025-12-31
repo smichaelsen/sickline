@@ -17,6 +17,7 @@ export type SickPeriodProps = {
   comments?: Array<{ date: string; comment: string }>;
   className?: string;
   pxPerDay?: number;
+  truncated?: boolean;
 };
 
 const DEFAULT_PX_PER_DAY = 32;
@@ -49,7 +50,8 @@ export function SickPeriod({
   severityPeriods,
   comments = [],
   className,
-  pxPerDay
+  pxPerDay,
+  truncated = false
 }: SickPeriodProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [inheritedPxPerDay, setInheritedPxPerDay] = useState(DEFAULT_PX_PER_DAY);
@@ -76,6 +78,14 @@ export function SickPeriod({
   const totalDays = Math.max(1, diffDays(start, end) + 1);
   const scale = pxPerDay ?? inheritedPxPerDay;
   const effectiveScale = totalDays === 1 ? BAR_HEIGHT_PX : scale;
+  const isOpenEnded = !endDate;
+  const roundingClass = truncated
+    ? isOpenEnded
+      ? "rounded-l-none rounded-r-none"
+      : "rounded-l-none rounded-r-full"
+    : isOpenEnded
+    ? "rounded-l-full rounded-r-none"
+    : "rounded-full";
 
   const gradient = useMemo(() => {
     if (!severityPeriods.length) return undefined;
@@ -138,8 +148,7 @@ export function SickPeriod({
         ...(pxPerDay != null ? { ["--px-per-day" as const]: `${pxPerDay}px` } : undefined)
       }}
     >
-      <div
-        className={clsx("w-full", endDate ? "rounded-full" : "rounded-l-full rounded-r-none")}
+      <div className={clsx("w-full", roundingClass)}
         style={{
           height: `${BAR_HEIGHT_PX}px`,
           background: gradient ?? severityColor[severityPeriods[0]?.status ?? "yellow"]
