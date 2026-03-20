@@ -17,6 +17,7 @@ export type SickPeriodProps = {
   comments?: Array<{ date: string; comment: string }>;
   className?: string;
   pxPerDay?: number;
+  onCommentClick?: (comment: { date: string; comment: string }, anchor: HTMLElement) => void;
 };
 
 const DEFAULT_PX_PER_DAY = 32;
@@ -49,7 +50,8 @@ export function SickPeriod({
   severityPeriods,
   comments = [],
   className,
-  pxPerDay
+  pxPerDay,
+  onCommentClick
 }: SickPeriodProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [inheritedPxPerDay, setInheritedPxPerDay] = useState(DEFAULT_PX_PER_DAY);
@@ -123,7 +125,7 @@ export function SickPeriod({
   const markers = comments.map((comment) => {
     const offsetDays = Math.max(0, Math.min(totalDays - 1, diffDays(start, parseDate(comment.date))));
     const leftPx = (offsetDays + 0.5) * effectiveScale;
-    return { leftPx };
+    return { leftPx, comment };
   });
 
   return (
@@ -155,11 +157,22 @@ export function SickPeriod({
       {markers.length > 0 ? (
         <div className="absolute inset-0 pointer-events-none">
           {markers.map((marker, index) => (
-            <span
-              key={index}
-              className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-sm ring-2 ring-slate-900/30"
-              style={{ left: `${marker.leftPx}px`, top: "80%" }}
-            />
+            onCommentClick ? (
+              <button
+                key={index}
+                type="button"
+                aria-label={`Comment on ${marker.comment.date}`}
+                className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-sm ring-2 ring-slate-900/30 pointer-events-auto cursor-pointer hover:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-shadow"
+                style={{ left: `${marker.leftPx}px`, top: "80%" }}
+                onClick={(e) => onCommentClick(marker.comment, e.currentTarget)}
+              />
+            ) : (
+              <span
+                key={index}
+                className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-sm ring-2 ring-slate-900/30"
+                style={{ left: `${marker.leftPx}px`, top: "80%" }}
+              />
+            )
           ))}
         </div>
       ) : null}
