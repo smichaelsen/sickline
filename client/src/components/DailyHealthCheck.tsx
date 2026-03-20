@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useMembers } from "../api/useMembers";
 import { useStatus } from "../api/useStatus";
 import { useUpsertStatus } from "../api/useUpsertStatus";
-import { yesterdayInTz } from "../config";
+import { todayInTz } from "../config";
 import { shiftDate } from "../dateUtils";
 import { MemberStatusRow, type MemberRowState } from "./MemberStatusRow";
 import type { Member, StatusEntry } from "../api/types";
@@ -51,7 +51,7 @@ function buildInitialForm(
 }
 
 export function DailyHealthCheck() {
-  const [date, setDate] = useState<string>(yesterdayInTz);
+  const [date, setDate] = useState<string>(todayInTz);
 
   const members = useMembers();
   const currentStatus = useStatus(date);
