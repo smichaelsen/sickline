@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useMembers } from "../api/useMembers";
 import { useSickPeriods } from "../api/useSickPeriods";
-import { todayInTz, shiftDate } from "../config";
+import { todayInTz } from "../config";
+import { shiftDate } from "../dateUtils";
 import type { SickPeriod as SickPeriodType } from "../api/types";
 import { SickPeriod } from "./SickPeriod";
 import { SickCommentTooltip } from "./SickCommentTooltip";
