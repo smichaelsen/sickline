@@ -21,6 +21,10 @@ export default defineConfig({
     strictPort: true,
     watch: {
       usePolling: true
+    },
+    proxy: {
+      "/api": "http://localhost:3000",
+      "/health": "http://localhost:3000"
     }
   }
 });
