@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useStatus } from "./api/useStatus";
 import { DailyHealthCheck } from "./components/DailyHealthCheck";
 import { TimelineView } from "./components/TimelineView";
+import { todayInTz } from "./config";
 
 type Screen = "daily" | "timeline";
 
@@ -11,6 +13,16 @@ const TABS: Array<{ id: Screen; label: string }> = [
 
 function App() {
   const [screen, setScreen] = useState<Screen>("daily");
+  const initialScreenSet = useRef(false);
+  const todayStatus = useStatus(todayInTz());
+
+  useEffect(() => {
+    if (initialScreenSet.current || todayStatus.loading) return;
+    initialScreenSet.current = true;
+    if ((todayStatus.data?.entries.length ?? 0) > 0) {
+      setScreen("timeline");
+    }
+  }, [todayStatus.loading, todayStatus.data]);
 
   return (
     <>
