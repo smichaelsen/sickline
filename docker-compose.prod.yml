@@ -1,0 +1,35 @@
+networks:
+  traefik-net:
+    external: true
+
+services:
+  sickline:
+    image: ghcr.io/smichaelsen/sickline:latest
+    container_name: sickline
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.sickline.rule=Host(`${SICKLINE_HOST}`)"
+      - "traefik.http.routers.sickline.entrypoints=websecure,web"
+      - "traefik.http.routers.sickline.tls=true"
+      - "traefik.http.routers.sickline.tls.certresolver=letsencrypt-dns"
+      - "traefik.http.services.sickline.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.sickline-auth.basicauth.users=${BASIC_AUTH_USERS}"
+      - "traefik.http.middlewares.sickline-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sickline-https.redirectscheme.permanent=true"
+      - "traefik.http.routers.sickline.middlewares=sickline-auth,sickline-https"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
