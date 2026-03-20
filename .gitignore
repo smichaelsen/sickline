@@ -10,3 +10,4 @@ CLAUDE.md
 start.sh
 data
 config/members.json
+.playwright-mcp
