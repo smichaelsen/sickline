@@ -136,6 +136,7 @@ function GanttRow({ periods, fromDate, totalDays, todayOffset, onCommentClick }:
 export function TimelineView() {
   const [daysBack, setDaysBack] = useState<DayRange>(60);
   const [activeTooltip, setActiveTooltip] = useState<ActiveTooltip | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const today = todayInTz();
   const from = shiftDate(today, -(daysBack - 1));
@@ -155,6 +156,12 @@ export function TimelineView() {
   const todayOffset = diffDays(fromDate, toDate);
 
   const gridWidth = totalDays * PX_PER_DAY;
+
+  useEffect(() => {
+    if (!loading && scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [daysBack, loading]);
 
   function handleCommentClick(comment: { date: string; comment: string }, anchor: HTMLElement) {
     const rect = anchor.getBoundingClientRect();
@@ -232,7 +239,7 @@ export function TimelineView() {
             </div>
 
             {/* Scrollable grid */}
-            <div className="overflow-x-auto flex-1">
+            <div ref={scrollRef} className="overflow-x-auto flex-1">
               <div style={{ width: `${gridWidth}px`, minWidth: "100%" }}>
                 {/* Day labels row */}
                 <div
