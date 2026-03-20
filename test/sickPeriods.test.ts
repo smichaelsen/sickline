@@ -234,6 +234,37 @@ describe("computeSickPeriods", () => {
     ]);
   });
 
+  it("extends period end to day before green when a 1-day gap exists between last sick and green entry", () => {
+    // yellow Mar 17–18, gap Mar 19 (no entry), green Mar 20
+    // → period extends to Mar 19 (day before green), not open-ended
+    const periods = computeSickPeriods(
+      [
+        { memberId: "s", date: "2026-03-17", status: "yellow", title: "🤧" },
+        { memberId: "s", date: "2026-03-18", status: "yellow", title: "🤧" },
+        { memberId: "s", date: "2026-03-20", status: "green" }
+      ],
+      { today: "2026-03-20" }
+    );
+
+    assert.equal(periods.length, 1);
+    assert.equal(periods[0].endDate, "2026-03-19", "period extends to day before green to cover the gap");
+  });
+
+  it("does not extend period end when green entry is consecutive (no gap)", () => {
+    // yellow Mar 17–18, green Mar 19 (next day) → period ends at Mar 18, no extension
+    const periods = computeSickPeriods(
+      [
+        { memberId: "s", date: "2026-03-17", status: "yellow", title: "🤧" },
+        { memberId: "s", date: "2026-03-18", status: "yellow", title: "🤧" },
+        { memberId: "s", date: "2026-03-19", status: "green" }
+      ],
+      { today: "2026-03-20" }
+    );
+
+    assert.equal(periods.length, 1);
+    assert.equal(periods[0].endDate, "2026-03-18", "no extension when green is consecutive");
+  });
+
   it("does not open-end stale periods older than 2 days", () => {
     const periods = computeSickPeriods(
       [{ memberId: "h", date: "2024-01-01", status: "red", title: "flu" }],

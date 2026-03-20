@@ -59,6 +59,7 @@ export function computeSickPeriods(
   let currentMember: string | null = null;
   let current: SickPeriod | null = null;
   let lastDate: string | null = null;
+  const lastEntryDateByMember = new Map<string, string>();
 
   const flush = () => {
     if (current) {
@@ -83,6 +84,8 @@ export function computeSickPeriods(
       currentMember = entry.memberId;
       lastDate = null;
     }
+
+    lastEntryDateByMember.set(entry.memberId, entry.date);
 
     if (entry.status === "green") {
       flush();
@@ -156,6 +159,20 @@ export function computeSickPeriods(
     const last = list[list.length - 1];
     if (!last) continue;
     const endAnchor = last.endDate ?? last.startDate;
+    // If a confirmed green entry follows the sick period, close it (don't mark open-ended).
+    // If there's a gap between the last sick day and the green entry (within the merge window),
+    // extend the period end to the day before the green to cover those unknown gap days.
+    const lastEntryDate = lastEntryDateByMember.get(last.memberId);
+    if (lastEntryDate && lastEntryDate > endAnchor) {
+      const gapToGreen = diffInDays(parseDate(endAnchor), parseDate(lastEntryDate));
+      if (gapToGreen > 1 && gapToGreen <= MAX_GAP_DAYS) {
+        const extendedEnd = addDays(lastEntryDate, -1);
+        last.endDate = extendedEnd;
+        const lastSeverity = last.severityPeriods[last.severityPeriods.length - 1];
+        lastSeverity.endDate = extendedEnd;
+      }
+      continue;
+    }
     const lastEnd = parseDate(endAnchor);
     if (diffInDays(lastEnd, today) <= OPEN_ENDED_WINDOW_DAYS) {
       last.endDate = undefined;
