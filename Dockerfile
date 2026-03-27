@@ -3,7 +3,7 @@ WORKDIR /app
 RUN apk add --no-cache python3 make g++
 
 COPY package*.json ./
-COPY tsconfig*.json vite.config.ts ./
+COPY tsconfig*.json vite.config.ts postcss.config.js ./
 COPY client ./client
 COPY src ./src
 COPY migrations ./migrations
