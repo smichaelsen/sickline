@@ -4,11 +4,12 @@ title: Deploy app to VPS behind Traefik with basic auth
 status: Done
 assignee: []
 created_date: '2026-03-20 22:59'
-updated_date: '2026-03-20 23:27'
+updated_date: '2026-03-28 09:13'
 labels:
   - devops
   - infra
 dependencies: []
+ordinal: 11000
 ---
 
 ## Description

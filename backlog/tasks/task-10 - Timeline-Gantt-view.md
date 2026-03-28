@@ -4,10 +4,11 @@ title: Timeline / Gantt view
 status: Done
 assignee: []
 created_date: '2026-03-20 14:07'
-updated_date: '2026-03-20 19:19'
+updated_date: '2026-03-28 09:13'
 labels:
   - frontend
 dependencies: []
+ordinal: 18000
 ---
 
 ## Description

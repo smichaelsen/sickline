@@ -17,6 +17,7 @@ final class DailyCheckViewModel {
     var errorMessage: String?
 
     private let apiClient: APIClient
+    private var prefillLoadedForDate: Date?
 
     init(apiClient: APIClient) {
         self.apiClient = apiClient
@@ -38,23 +39,26 @@ final class DailyCheckViewModel {
         defer { isLoading = false }
 
         do {
-            // Fetch members once (idempotent; members rarely change)
-            if members.isEmpty {
-                members = try await apiClient.get("/api/members")
-                // Ensure every member has an entry slot
-                for member in members where entries[member.id] == nil {
-                    entries[member.id] = MemberEntry()
-                }
+            let fetched: [Member] = try await apiClient.get("/api/members")
+            members = fetched
+            // Ensure every member has an entry slot (preserves existing user input)
+            for member in members where entries[member.id] == nil {
+                entries[member.id] = MemberEntry()
             }
-            // Prefill status + title from the day before selectedDate; comments always empty
-            let prefillDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
-            let response: StatusResponse = try await apiClient.get("/api/status?date=\(prefillDate.apiDateString)")
-            for entry in response.entries {
-                var slot = entries[entry.memberId] ?? MemberEntry()
-                slot.status = entry.status
-                slot.title = entry.title ?? ""
-                slot.comment = ""   // always start empty per spec
-                entries[entry.memberId] = slot
+            // Prefill status + title from the day before selectedDate; comments always empty.
+            // Skip if we already prefilled for this date — avoids overwriting unsaved user input
+            // when the view reloads without the date changing.
+            if prefillLoadedForDate != selectedDate {
+                let prefillDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
+                let response: StatusResponse = try await apiClient.get("/api/status?date=\(prefillDate.apiDateString)")
+                for entry in response.entries {
+                    var slot = entries[entry.memberId] ?? MemberEntry()
+                    slot.status = entry.status
+                    slot.title = entry.title ?? ""
+                    slot.comment = ""   // always start empty per spec
+                    entries[entry.memberId] = slot
+                }
+                prefillLoadedForDate = selectedDate
             }
         } catch is CancellationError {
             // Task was cancelled by SwiftUI when the date changed — discard silently.

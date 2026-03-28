@@ -1,20 +1,35 @@
 import Foundation
 
+private enum ISO8601Formatters {
+    static let withFractionalSeconds: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return f
+    }()
+    static let withoutFractionalSeconds: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        return f
+    }()
+    static let dateOnly: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withFullDate]
+        return f
+    }()
+    static let apiDate: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
+}
+
 extension Date {
     /// Parses an ISO 8601 date string (e.g. "2024-03-28" or "2024-03-28T10:00:00Z").
     init?(iso8601 string: String) {
-        let full = ISO8601DateFormatter()
-        full.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        if let date = full.date(from: string) { self = date; return }
-
-        let fullNoFraction = ISO8601DateFormatter()
-        fullNoFraction.formatOptions = [.withInternetDateTime]
-        if let date = fullNoFraction.date(from: string) { self = date; return }
-
-        let dateOnly = ISO8601DateFormatter()
-        dateOnly.formatOptions = [.withFullDate]
-        if let date = dateOnly.date(from: string) { self = date; return }
-
+        if let date = ISO8601Formatters.withFractionalSeconds.date(from: string) { self = date; return }
+        if let date = ISO8601Formatters.withoutFractionalSeconds.date(from: string) { self = date; return }
+        if let date = ISO8601Formatters.dateOnly.date(from: string) { self = date; return }
         return nil
     }
 
@@ -28,10 +43,7 @@ extension Date {
 
     /// Returns the date formatted as "yyyy-MM-dd" for API requests.
     var apiDateString: String {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.locale = Locale(identifier: "en_US_POSIX")
-        return f.string(from: self)
+        ISO8601Formatters.apiDate.string(from: self)
     }
 }
 

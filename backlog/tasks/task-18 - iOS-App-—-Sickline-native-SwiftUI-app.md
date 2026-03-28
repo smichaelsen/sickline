@@ -1,13 +1,15 @@
 ---
 id: task-18
 title: iOS App — Sickline native SwiftUI app
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-03-28 07:47'
+updated_date: '2026-03-28 09:13'
 labels:
   - ios
 dependencies: []
 priority: medium
+ordinal: 1000
 ---
 
 ## Description

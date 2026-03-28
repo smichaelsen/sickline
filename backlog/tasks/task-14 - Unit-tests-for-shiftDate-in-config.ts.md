@@ -4,10 +4,11 @@ title: Unit tests for shiftDate in config.ts
 status: Done
 assignee: []
 created_date: '2026-03-20 20:22'
-updated_date: '2026-03-20 20:46'
+updated_date: '2026-03-28 09:13'
 labels:
   - frontend
 dependencies: []
+ordinal: 14000
 ---
 
 ## Acceptance Criteria

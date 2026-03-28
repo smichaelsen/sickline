@@ -4,12 +4,13 @@ title: Timeline screen
 status: Done
 assignee: []
 created_date: '2026-03-28 07:51'
-updated_date: '2026-03-28 09:10'
+updated_date: '2026-03-28 09:13'
 labels:
   - ios
 dependencies: []
 parent_task_id: task-18
 priority: medium
+ordinal: 10000
 ---
 
 ## Description

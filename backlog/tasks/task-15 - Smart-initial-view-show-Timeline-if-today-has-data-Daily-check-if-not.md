@@ -4,9 +4,10 @@ title: 'Smart initial view: show Timeline if today has data, Daily check if not'
 status: Done
 assignee: []
 created_date: '2026-03-20 22:13'
-updated_date: '2026-03-20 22:24'
+updated_date: '2026-03-28 09:13'
 labels: []
 dependencies: []
+ordinal: 13000
 ---
 
 ## Description

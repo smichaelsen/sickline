@@ -4,9 +4,10 @@ title: Upgrade Storybook to v10
 status: Done
 assignee: []
 created_date: '2025-12-29 07:49'
-updated_date: '2026-03-20 13:51'
+updated_date: '2026-03-28 09:13'
 labels: []
 dependencies: []
+ordinal: 22000
 ---
 
 ## Description

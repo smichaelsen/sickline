@@ -4,10 +4,11 @@ title: Extract and test SickPeriod gradient computation
 status: Done
 assignee: []
 created_date: '2026-03-20 20:22'
-updated_date: '2026-03-20 20:32'
+updated_date: '2026-03-28 09:13'
 labels:
   - frontend
 dependencies: []
+ordinal: 15000
 ---
 
 ## Acceptance Criteria

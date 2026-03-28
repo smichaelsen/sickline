@@ -1,14 +1,16 @@
 ---
 id: task-18.6
 title: TestFlight distribution
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-03-28 07:52'
+updated_date: '2026-03-28 09:13'
 labels:
   - ios
 dependencies: []
 parent_task_id: task-18
 priority: low
+ordinal: 500
 ---
 
 ## Description

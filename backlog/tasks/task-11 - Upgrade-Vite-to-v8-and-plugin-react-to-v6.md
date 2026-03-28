@@ -4,11 +4,12 @@ title: Upgrade Vite to v8 and plugin-react to v6
 status: Done
 assignee: []
 created_date: '2026-03-20 17:51'
-updated_date: '2026-03-20 18:04'
+updated_date: '2026-03-28 09:13'
 labels:
   - frontend
   - devops
 dependencies: []
+ordinal: 17000
 ---
 
 ## Description

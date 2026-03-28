@@ -140,7 +140,7 @@ private struct TimelineContent: View {
                 AxisGridLine()
                 AxisValueLabel {
                     if let name = value.as(String.self) {
-                        let color = vm.members
+                        let color = vm.memberIndex.values
                             .first(where: { $0.name == name })
                             .flatMap { $0.color }
                             .map { Color(hex: $0) } ?? Color.primary
@@ -171,7 +171,8 @@ private struct TimelineContent: View {
     // MARK: - Tap detection
 
     private func handleChartTap(at location: CGPoint, proxy: ChartProxy, geo: GeometryProxy) {
-        let origin = geo[proxy.plotFrame!].origin
+        guard let plotFrame = proxy.plotFrame else { return }
+        let origin = geo[plotFrame].origin
         let relativeLocation = CGPoint(
             x: location.x - origin.x,
             y: location.y - origin.y

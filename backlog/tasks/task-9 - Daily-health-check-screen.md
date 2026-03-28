@@ -4,10 +4,11 @@ title: Daily health check screen
 status: Done
 assignee: []
 created_date: '2026-03-20 14:06'
-updated_date: '2026-03-20 18:36'
+updated_date: '2026-03-28 09:13'
 labels:
   - frontend
 dependencies: []
+ordinal: 19000
 ---
 
 ## Description
