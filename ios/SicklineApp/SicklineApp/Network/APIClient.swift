@@ -6,6 +6,8 @@ actor APIClient {
 
     init(session: URLSession = .shared) {
         self.session = session
+        // API already returns camelCase keys (memberId, startDate, etc.) — no
+        // convertFromSnakeCase strategy needed; plain JSONDecoder matches Swift properties directly.
         self.decoder = JSONDecoder()
     }
 
