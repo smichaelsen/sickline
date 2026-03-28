@@ -22,7 +22,7 @@ struct SicklineApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                Text("Daily Check")
+                DailyCheckView()
                     .tabItem {
                         Label("Daily Check", systemImage: "person.fill")
                     }

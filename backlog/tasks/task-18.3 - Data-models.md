@@ -1,10 +1,10 @@
 ---
 id: task-18.3
 title: Data models
-status: In Progress
+status: Done
 assignee: []
 created_date: '2026-03-28 07:51'
-updated_date: '2026-03-28 08:29'
+updated_date: '2026-03-28 08:31'
 labels:
   - ios
 dependencies: []
