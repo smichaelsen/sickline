@@ -33,7 +33,6 @@ final class DailyCheckViewModel {
     }
 
     func load() async {
-        guard !isLoading else { return }
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
@@ -57,6 +56,8 @@ final class DailyCheckViewModel {
                 slot.comment = ""   // always start empty per spec
                 entries[entry.memberId] = slot
             }
+        } catch is CancellationError {
+            // Task was cancelled by SwiftUI when the date changed — discard silently.
         } catch {
             errorMessage = errorDescription(error)
         }

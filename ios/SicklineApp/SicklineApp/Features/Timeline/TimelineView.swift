@@ -91,29 +91,33 @@ private struct TimelineContent: View {
 
             ForEach(vm.periods) { period in
                 let memberName = vm.memberName(for: period.memberId)
-                let start = period.startDate.iso8601Date ?? today
-                let end = period.endDate?.iso8601Date ?? today
+                // Skip periods whose startDate can't be parsed — rendering them at a
+                // fallback date would silently corrupt the chart.
+                if let start = period.startDate.iso8601Date {
+                    let end = period.endDate?.iso8601Date ?? today
 
-                // Use severity sub-periods for color-coded segments when present.
-                if period.severityPeriods.isEmpty {
-                    BarMark(
-                        xStart: .value("Start", start),
-                        xEnd: .value("End", end),
-                        y: .value("Member", memberName)
-                    )
-                    .foregroundStyle(statusColor(period.status))
-                    .cornerRadius(4)
-                } else {
-                    ForEach(period.severityPeriods, id: \.startDate) { sub in
-                        let subStart = sub.startDate.iso8601Date ?? start
-                        let subEnd = sub.endDate.iso8601Date ?? today
+                    // Use severity sub-periods for color-coded segments when present.
+                    if period.severityPeriods.isEmpty {
                         BarMark(
-                            xStart: .value("Start", subStart),
-                            xEnd: .value("End", subEnd),
+                            xStart: .value("Start", start),
+                            xEnd: .value("End", end),
                             y: .value("Member", memberName)
                         )
-                        .foregroundStyle(statusColor(sub.status))
+                        .foregroundStyle(statusColor(period.status))
                         .cornerRadius(4)
+                    } else {
+                        ForEach(period.severityPeriods, id: \.startDate) { sub in
+                            if let subStart = sub.startDate.iso8601Date,
+                               let subEnd = sub.endDate.iso8601Date {
+                                BarMark(
+                                    xStart: .value("Start", subStart),
+                                    xEnd: .value("End", subEnd),
+                                    y: .value("Member", memberName)
+                                )
+                                .foregroundStyle(statusColor(sub.status))
+                                .cornerRadius(4)
+                            }
+                        }
                     }
                 }
             }
@@ -180,8 +184,8 @@ private struct TimelineContent: View {
 
         let today = Date()
         let tapped = vm.periods.first { period in
-            guard vm.memberName(for: period.memberId) == tappedName else { return false }
-            let start = period.startDate.iso8601Date ?? today
+            guard vm.memberName(for: period.memberId) == tappedName,
+                  let start = period.startDate.iso8601Date else { return false }
             let end = period.endDate?.iso8601Date ?? today
             return tappedDate >= start && tappedDate <= end
         }

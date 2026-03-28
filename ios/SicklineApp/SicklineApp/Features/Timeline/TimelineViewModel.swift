@@ -28,7 +28,6 @@ final class TimelineViewModel {
     }
 
     func load() async {
-        guard !isLoading else { return }
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
@@ -42,6 +41,8 @@ final class TimelineViewModel {
             let path = "/api/sick-periods?from=\(from.apiDateString)&to=\(today.apiDateString)"
             let response: SickPeriodsResponse = try await apiClient.get(path)
             periods = response.periods
+        } catch is CancellationError {
+            // Task was cancelled by SwiftUI when the range changed — discard silently.
         } catch {
             errorMessage = errorDescription(error)
         }

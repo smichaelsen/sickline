@@ -16,12 +16,12 @@ actor APIClient {
     }
 
     func get<T: Decodable>(_ path: String) async throws -> T {
-        let request = makeRequest(path: path, method: "GET")
+        let request = try makeRequest(path: path, method: "GET")
         return try await perform(request)
     }
 
     func put<Body: Encodable, T: Decodable>(_ path: String, body: Body) async throws -> T {
-        var request = makeRequest(path: path, method: "PUT")
+        var request = try makeRequest(path: path, method: "PUT")
         request.httpBody = try JSONEncoder().encode(body)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return try await perform(request)
@@ -29,8 +29,10 @@ actor APIClient {
 
     // MARK: - Private
 
-    private func makeRequest(path: String, method: String) -> URLRequest {
-        let url = URL(string: baseURL + path)!
+    private func makeRequest(path: String, method: String) throws -> URLRequest {
+        guard let url = URL(string: baseURL + path) else {
+            throw APIError.unknown(URLError(.badURL))
+        }
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue(authHeader, forHTTPHeaderField: "Authorization")
