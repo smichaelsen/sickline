@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Environment key
 
 private struct APIClientKey: EnvironmentKey {
-    static let defaultValue = APIClient()
+    static let defaultValue = APIClient(baseURL: "", authHeader: "")
 }
 
 extension EnvironmentValues {
@@ -17,7 +17,7 @@ extension EnvironmentValues {
 
 @main
 struct SicklineApp: App {
-    private let apiClient = APIClient()
+    private let apiClient = APIClient(baseURL: Config.baseURL, authHeader: Config.basicAuthHeader)
 
     var body: some Scene {
         WindowGroup {
@@ -26,7 +26,7 @@ struct SicklineApp: App {
                     .tabItem {
                         Label("Daily Check", systemImage: "person.fill")
                     }
-                Text("Timeline")
+                TimelineView()
                     .tabItem {
                         Label("Timeline", systemImage: "chart.bar.xaxis")
                     }

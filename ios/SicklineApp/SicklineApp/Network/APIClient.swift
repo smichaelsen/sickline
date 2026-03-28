@@ -1,10 +1,14 @@
 import Foundation
 
 actor APIClient {
+    private let baseURL: String
+    private let authHeader: String
     private let session: URLSession
     private let decoder: JSONDecoder
 
-    init(session: URLSession = .shared) {
+    init(baseURL: String, authHeader: String, session: URLSession = .shared) {
+        self.baseURL = baseURL
+        self.authHeader = authHeader
         self.session = session
         // API already returns camelCase keys (memberId, startDate, etc.) — no
         // convertFromSnakeCase strategy needed; plain JSONDecoder matches Swift properties directly.
@@ -26,10 +30,10 @@ actor APIClient {
     // MARK: - Private
 
     private func makeRequest(path: String, method: String) -> URLRequest {
-        let url = URL(string: Config.baseURL + path)!
+        let url = URL(string: baseURL + path)!
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.setValue(Config.basicAuthHeader, forHTTPHeaderField: "Authorization")
+        request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         return request
     }
 
