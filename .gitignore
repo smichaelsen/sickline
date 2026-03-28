@@ -11,3 +11,6 @@ start.sh
 data
 config/members.json
 .playwright-mcp
+
+# Xcode user-specific state
+*.xcuserstate
